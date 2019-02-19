@@ -1,6 +1,8 @@
 
 $PSVersionTable | Out-String
 
+Import-Module VSSetup -ea stop
+
 import-module .\psake.4.7.4\tools\psake\psake.psm1
 
 $psake.config_default.verboseError = $true
