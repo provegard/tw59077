@@ -1,13 +1,14 @@
 
-function Exec(
-    [scriptblock]$cmd
-) {
-    $global:lastexitcode = 0
-    & $cmd
-    if ($global:lastexitcode -ne 0) {
-        throw "it failed!"
-    }
+import-module .\psake.4.7.4\tools\psake\psake.psm1
+
+$psake.config_default.verboseError = $true
+
+invoke-psake build-file.ps1 -framework '4.7.2x86' -t TestIt
+
+if ($psake.build_success -eq $FALSE) {
+    $psakeError = $psake.error_message
+    $psakeError = if ($psakeError) { $psakeError } else { "Unknown error" }
+    throw $psakeError
 }
 
-Exec { dist\StdErrWriter.exe }
-write-host "it worked!"
+write-host "It worked!"
